@@ -1,4 +1,4 @@
-class FileData {
+export class FileData {
     fileName: string
     filePath: string
     filesize: number
