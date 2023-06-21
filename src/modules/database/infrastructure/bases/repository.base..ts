@@ -1,7 +1,7 @@
 import { Document, FilterQuery, Model, QueryOptions, SaveOptions, UpdateQuery, UpdateWithAggregationPipeline } from 'mongoose';
 
 
-import { CreatedModel, RemovedModel, UpdatedModel } from '../../../file/infraestructure/interfaces/entity.interface';
+import { CreatedModel, RemovedModel, UpdatedModel } from '../../../file/infrastructure/interfaces/entity.interface';
 
 export class RepositoryBase<T> {
   constructor(private readonly model: Model<T>) {}

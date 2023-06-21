@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { diskStorage } from 'multer';
 import { join } from 'path';
 import { FileDataCommand } from '../../commands/fileData.command';
-import { createFile } from '../../../infraestructure/helpers/storage.helper';
+import { createFile } from '../../../infrastructure/helpers/storage.helper';
 
 @Injectable()
 export default class SaveFileLocalUseCase {

@@ -1,5 +1,5 @@
 import { Module } from '@nestjs/common';
-import { FileDataController } from './infraestructure/controllers/file-data/file-data.controller';
+import { FileDataController } from './infrastructure/controllers/file-data/file-data.controller';
 import { DatabaseModule } from '../database/database.module';
 import { MulterModule } from '@nestjs/platform-express';
 import {

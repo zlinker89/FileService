@@ -1,5 +1,5 @@
 import { Injectable, Inject } from '@nestjs/common';
-import { CreatedModel } from 'src/modules/file/infraestructure/interfaces/entity.interface';
+import { CreatedModel } from 'src/modules/file/infrastructure/interfaces/entity.interface';
 import { FileDataCommand } from '../../../../file/application/commands/fileData.command';
 import { FileDataFactory } from '../../factories/file/fileData.factory';
 import { FileDataRepository } from '../../../infrastructure/repositories/fileData.repository';
