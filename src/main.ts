@@ -4,10 +4,10 @@ import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
-  const config = new DocumentBuilder().setTitle('EXPERTOSIP ASEMPTAXIS API')
-    .setDescription("Una api para interconectar ASTERISK con la API de azure, tambiem permite gestionar los eventos por medio del webhook")
+  const config = new DocumentBuilder().setTitle('EXPERTOSIP FILESERVICE API')
+    .setDescription("Una api para administar sistemas de archivos")
     .setVersion('v1')
-    .addTag('autocab')
+    .addTag('FSExpert')
     .build();
 
   const document = SwaggerModule.createDocument(app, config);

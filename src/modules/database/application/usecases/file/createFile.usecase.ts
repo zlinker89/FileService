@@ -12,7 +12,9 @@ export default class CreateFileDataUseCase {
     private _fileDataFactory: FileDataFactory,
   ) {}
 
-  public handler(fileDataCommand: FileDataCommand): Promise<CreatedModel> {
+  public handler(fileDataCommand: FileDataCommand, fileUpload: Express.Multer.File): Promise<CreatedModel> {
+    fileDataCommand.fileName = fileUpload.originalname
+    fileDataCommand.filesize = fileUpload.size
     const fileDataObject =
       this._fileDataFactory.createFileData(fileDataCommand);
     return this._fileDataRepository.create({ ...fileDataObject });

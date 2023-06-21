@@ -10,8 +10,8 @@ export default class GetFileDataUseCase {
     @Inject('FileDataRepository') private _fileDataRepository: FileDataRepository,
   ) {}
 
-  public async handler(fileName: string, moduleUuId: string): Promise<FileData[]> {
-    const predicate = { fileName: fileName, ModuleUuId: moduleUuId };
+  public async handler(fileId: string): Promise<FileData[]> {
+    const predicate = { _id: fileId };
     const files = await this._fileDataRepository.find(predicate);
     return ProductMapper.toDomains(files);
   }
