@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { diskStorage } from 'multer';
 import { join } from 'path';
 import { FileDataCommand } from '../../commands/fileData.command';
-import { createFile } from '../../../infrastructure/helpers/storage.helper';
+import { createDirectoryIfNotExist, createFile } from '../../../infrastructure/helpers/storage.helper';
 
 @Injectable()
 export default class SaveFileLocalUseCase {
@@ -10,7 +10,9 @@ export default class SaveFileLocalUseCase {
   ) {}
 
   public handler(FileMulter: Express.Multer.File, fileDataCommand: FileDataCommand) {
-    const path = join(process.cwd(), './public', fileDataCommand.filePath)
+    const directory = join(process.cwd(), './public')
+    const path = join(directory, fileDataCommand.filePath)
+    createDirectoryIfNotExist(fileDataCommand.filePath, directory)
     createFile(path, FileMulter.originalname, FileMulter.buffer)
     return path
   }

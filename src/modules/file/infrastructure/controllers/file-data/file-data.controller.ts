@@ -94,7 +94,11 @@ export class FileDataController {
     @Body() fileDataCommand: FileDataCommand,
     @UploadedFile() fileUpload: Express.Multer.File,
   ) {
-    await this._fileStorage.handler(fileUpload, fileDataCommand);
+    try {
+      await this._fileStorage.handler(fileUpload, fileDataCommand);
+    } catch (error) {
+      // TODO: crear exception CreateFileException
+    }
     const fileCreateModel = await this._createFileData.handler(fileDataCommand, fileUpload);
     return {
       data: fileCreateModel.id,
