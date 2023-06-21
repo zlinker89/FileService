@@ -9,8 +9,8 @@ export default class DeleteFileDataUseCase {
     @Inject('FileDataRepository') private _fileDataRepository: FileDataRepository,
   ) {}
 
-  public handler(fileDataObject: FileData): Promise<RemovedModel> {
-    const predicate = { fileName: fileDataObject.fileName, ModuleUuId: fileDataObject.moduleUuId };
+  public async handler(fileDataId: string): Promise<RemovedModel> {
+    const predicate = { _id: fileDataId };
     return this._fileDataRepository.remove(predicate);
   }
 }

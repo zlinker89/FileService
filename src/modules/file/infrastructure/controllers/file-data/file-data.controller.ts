@@ -1,6 +1,7 @@
 import {
   Body,
   Controller,
+  Delete,
   Get,
   Param,
   Post,
@@ -19,8 +20,9 @@ import { FileInterceptor } from '@nestjs/platform-express';
 import { createReadStream } from 'fs';
 import { join } from 'path';
 import { Response } from 'express';
-import { FileStorageUseCase } from 'src/modules/file/application/usescases/file';
+import { DeleteFileLocalUseCase, FileStorageUseCase } from 'src/modules/file/application/usescases/file';
 import { memoryStorage } from 'multer';
+import { FileNotFoundException } from '../../../application/exceptions/fileNotFound.exception';
 
 @Controller('file-data')
 @ApiTags('FSExpert')
@@ -30,21 +32,29 @@ export class FileDataController {
     private _createFileData: CreateFileDataUseCase,
     private _getFileData: GetFileDataUseCase,
     private _deleteFileData: DeleteFileDataUseCase,
+    private _deleteFileLocalData: DeleteFileLocalUseCase,
   ) {}
 
   @Get('/:fileId/preview')
   @ApiResponse({
     status: 200,
-    description: 'Consultar file por file name y module uuid',
+    description: 'Consultar file por ID',
+  })
+  @ApiResponse({
+    status: 404,
+    description: 'Archivo no encontrado',
   })
   async getFileDataToPreview(
     @Param('fileId') fileId: string,
     @Res() res: Response,
   ) {
-    const files = await this._getFileData.handler(fileId);
-    // TODO: add exception file not found
-    const file = createReadStream(join(process.cwd(), 'public', files[0].filePath, files[0].fileName));
-    file.pipe(res);
+    try {
+      const files = await this._getFileData.handler(fileId);
+      const file = createReadStream(join(process.cwd(), 'public', files[0].filePath, files[0].fileName));
+      file.pipe(res);
+    } catch (error) {
+      throw new FileNotFoundException("El archivo no fue encontrado", 404)
+    }
   }
 
   @Post('/create')
@@ -66,5 +76,29 @@ export class FileDataController {
       data: fileCreateModel.id,
       status: fileCreateModel.created,
     };
+  }
+
+  @Delete('/:fileId')
+  @ApiResponse({
+    status: 200,
+    description: 'Eliminar file por ID',
+  })
+  @ApiResponse({
+    status: 404,
+    description: 'Archivo no encontrado',
+  })
+  async deleteFileData(
+    @Param('fileId') fileId: string
+  ) {
+    try {
+      await this._deleteFileLocalData.handler(fileId);
+      const fileDeleteModel = await this._deleteFileData.handler(fileId);
+      return {
+        count: fileDeleteModel.deletedCount,
+        status: fileDeleteModel.deleted,
+      };
+    } catch (error) {
+      throw new FileNotFoundException("El archivo no fue encontrado", 404)
+    }
   }
 }

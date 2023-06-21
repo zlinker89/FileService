@@ -11,7 +11,6 @@ export default class SaveFileLocalUseCase {
 
   public handler(FileMulter: Express.Multer.File, fileDataCommand: FileDataCommand) {
     const path = join(process.cwd(), './public', fileDataCommand.filePath)
-    console.log(path)
     createFile(path, FileMulter.originalname, FileMulter.buffer)
     return path
   }

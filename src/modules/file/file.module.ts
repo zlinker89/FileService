@@ -5,11 +5,12 @@ import { MulterModule } from '@nestjs/platform-express';
 import {
   FileStorageUseCase,
   SaveFileLocalUseCase,
+  DeleteFileLocalUseCase
 } from './application/usescases/file';
 
 @Module({
   controllers: [FileDataController],
   imports: [DatabaseModule, MulterModule],
-  providers: [FileStorageUseCase, SaveFileLocalUseCase],
+  providers: [FileStorageUseCase, SaveFileLocalUseCase, DeleteFileLocalUseCase],
 })
 export class FileModule {}
