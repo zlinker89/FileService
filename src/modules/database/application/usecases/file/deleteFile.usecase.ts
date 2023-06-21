@@ -1,7 +1,7 @@
 import { Injectable, Inject } from '@nestjs/common';
 import { FileData } from 'src/modules/file/domain/file/fileData.model';
 import { RemovedModel } from 'src/modules/file/infraestructure/interfaces/entity.interface';
-import { FileDataRepository } from 'src/modules/file/infraestructure/repositories/fileData.repository';
+import { FileDataRepository } from 'src/modules/database/infrastructure/repositories/fileData.repository';
 
 @Injectable()
 export default class DeleteFileDataUseCase {

@@ -1,4 +1,5 @@
 import { Prop, Schema, SchemaFactory } from "@nestjs/mongoose";
+import { FileSystem } from '../../../../common/enums/fileSystem.enum';
 
 export type FileDataModelDocument = FileDataModel & Document;
 
@@ -11,8 +12,10 @@ export class FileDataModel {
     @Prop()
     filePath: string;
     @Prop()
-    fileSize: string;
+    fileSize: number;
     @Prop()
     moduleUuId: string;
+    @Prop({ type: String, enum: FileSystem })
+    fileSystem: FileSystem;
 }
 export const FileDataSchema = SchemaFactory.createForClass(FileDataModel);
