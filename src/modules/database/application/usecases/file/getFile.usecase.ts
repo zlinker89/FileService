@@ -1,5 +1,4 @@
 import { Injectable, Inject } from '@nestjs/common';
-import { FileDataFactory } from '../../factories/file/fileData.factory';
 import { FileDataRepository } from '../../../infrastructure/repositories/fileData.repository';
 import { FileData } from '../../../../file/domain/file/fileData.model';
 import { ProductMapper } from '../../../infrastructure/mappers/file/fileData.mapper';

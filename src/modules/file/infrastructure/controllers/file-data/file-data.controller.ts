@@ -38,7 +38,7 @@ export class FileDataController {
   @Get('/:fileId/preview')
   @ApiResponse({
     status: 200,
-    description: 'Consultar file por ID',
+    description: 'Previsualizar el file por ID',
   })
   @ApiResponse({
     status: 404,
@@ -52,6 +52,30 @@ export class FileDataController {
       const files = await this._getFileData.handler(fileId);
       const file = createReadStream(join(process.cwd(), 'public', files[0].filePath, files[0].fileName));
       file.pipe(res);
+    } catch (error) {
+      throw new FileNotFoundException("El archivo no fue encontrado", 404)
+    }
+  }
+
+  @Get('/:fileId')
+  @ApiResponse({
+    status: 200,
+    description: 'Consultar file por ID',
+  })
+  @ApiResponse({
+    status: 404,
+    description: 'Archivo no encontrado',
+  })
+  async getFileData(
+    @Param('fileId') fileId: string
+  ) {
+    try {
+      const files = await this._getFileData.handler(fileId);
+      return {
+        data: files,
+        count: files.length,
+        status: files.length > 0
+      }
     } catch (error) {
       throw new FileNotFoundException("El archivo no fue encontrado", 404)
     }
