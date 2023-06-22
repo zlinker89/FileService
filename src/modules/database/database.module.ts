@@ -8,11 +8,14 @@ import {
 } from './application/usecases/file';
 import { FileDataFactory } from './application/factories/file/fileData.factory';
 import { FileDataRepository } from './infrastructure/repositories/fileData.repository';
+import { ApiKeyModel, ApiKeySchema } from './domain/models/apiKey.schema';
+import { GetFApiKeyUseCase } from './application/usecases/api-key';
 
 @Module({
   imports: [
-    MongooseModule.forFeature([
+  MongooseModule.forFeature([
       { name: FileDataModel.name, schema: FileDataSchema },
+      { name: ApiKeyModel.name, schema: ApiKeySchema },
     ]),
   ],
   providers: [
@@ -21,7 +24,8 @@ import { FileDataRepository } from './infrastructure/repositories/fileData.repos
     CreateFileDataUseCase,
     GetFileDataUseCase,
     DeleteFileDataUseCase,
+    GetFApiKeyUseCase
   ],
-  exports: [CreateFileDataUseCase, GetFileDataUseCase, DeleteFileDataUseCase],
+  exports: [CreateFileDataUseCase, GetFileDataUseCase, DeleteFileDataUseCase, GetFApiKeyUseCase],
 })
 export class DatabaseModule {}
