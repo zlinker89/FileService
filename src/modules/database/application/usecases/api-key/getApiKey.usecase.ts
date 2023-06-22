@@ -6,7 +6,7 @@ import { ApiKey } from '../../../../file/domain/api-key/apiKey.model';
 @Injectable()
 export default class GetFApiKeyUseCase {
   constructor(
-    @Inject('FileDataRepository') private _apiKeyRepository: ApiKeyRepository,
+    @Inject('ApiKeyRepository') private _apiKeyRepository: ApiKeyRepository,
   ) {}
 
   public async handler(name: string): Promise<ApiKey[]> {

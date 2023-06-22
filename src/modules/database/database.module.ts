@@ -10,6 +10,7 @@ import { FileDataFactory } from './application/factories/file/fileData.factory';
 import { FileDataRepository } from './infrastructure/repositories/fileData.repository';
 import { ApiKeyModel, ApiKeySchema } from './domain/models/apiKey.schema';
 import { GetFApiKeyUseCase } from './application/usecases/api-key';
+import { ApiKeyRepository } from './infrastructure/repositories/apiKeyrepository';
 
 @Module({
   imports: [
@@ -21,6 +22,7 @@ import { GetFApiKeyUseCase } from './application/usecases/api-key';
   providers: [
     FileDataFactory,
     { provide: 'FileDataRepository', useClass: FileDataRepository },
+    { provide: 'ApiKeyRepository', useClass: ApiKeyRepository },
     CreateFileDataUseCase,
     GetFileDataUseCase,
     DeleteFileDataUseCase,

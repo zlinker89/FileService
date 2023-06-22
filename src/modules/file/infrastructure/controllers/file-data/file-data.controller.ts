@@ -7,9 +7,10 @@ import {
   Post,
   Res,
   UploadedFile,
+  UseGuards,
   UseInterceptors,
 } from '@nestjs/common';
-import { ApiConsumes, ApiResponse, ApiTags } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiConsumes, ApiHeaders, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { FileDataCommand } from '../../../application/commands/fileData.command';
 import {
   CreateFileDataUseCase,
@@ -23,6 +24,8 @@ import { Response } from 'express';
 import { DeleteFileLocalUseCase, FileStorageUseCase } from 'src/modules/file/application/usescases/file';
 import { memoryStorage } from 'multer';
 import { FileNotFoundException } from '../../../application/exceptions/fileNotFound.exception';
+import { AuthGuard } from '../../guards/auth/auth.guard';
+import { customAuthHeader } from '../../headers/custom.header';
 
 @Controller('file-data')
 @ApiTags('FSExpert')
@@ -60,8 +63,10 @@ export class FileDataController {
       throw new FileNotFoundException("El archivo no fue encontrado", 404)
     }
   }
-
+  @UseGuards(AuthGuard)
   @Get('/:fileId')
+  @ApiHeaders(customAuthHeader)
+  @ApiBearerAuth('access-token')
   @ApiResponse({
     status: 200,
     description: 'Consultar file por ID',
@@ -84,8 +89,10 @@ export class FileDataController {
       throw new FileNotFoundException("El archivo no fue encontrado", 404)
     }
   }
-
+  @UseGuards(AuthGuard)
   @Post('/create')
+  @ApiHeaders(customAuthHeader)
+  @ApiBearerAuth('access-token')
   @ApiConsumes('multipart/form-data')
   @UseInterceptors(FileInterceptor('file', {
     storage: memoryStorage()
@@ -109,8 +116,10 @@ export class FileDataController {
       status: fileCreateModel.created,
     };
   }
-
+  @UseGuards(AuthGuard)
   @Delete('/:fileId')
+  @ApiHeaders(customAuthHeader)
+  @ApiBearerAuth('access-token')
   @ApiResponse({
     status: 200,
     description: 'Eliminar file por ID',
