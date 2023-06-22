@@ -9,11 +9,16 @@ export default class SaveFileLocalUseCase {
   constructor(
   ) {}
 
-  public handler(FileMulter: Express.Multer.File, fileDataCommand: FileDataCommand) {
+  public async handler(FileMulter: Express.Multer.File, fileDataCommand: FileDataCommand) {
     const directory = join(process.cwd(), './public')
     const path = join(directory, fileDataCommand.filePath)
-    createDirectoryIfNotExist(fileDataCommand.filePath, directory)
-    createFile(path, FileMulter.originalname, FileMulter.buffer)
+    try {
+      await createDirectoryIfNotExist(fileDataCommand.filePath, directory)
+      await createFile(path, FileMulter.originalname, FileMulter.buffer)
+    } catch (error) {
+      // TODO: log errores
+      console.log(error)
+    }
     return path
   }
 }

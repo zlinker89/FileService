@@ -1,5 +1,8 @@
 const fs = require('fs');
 import { join } from 'path';
+import { FileWriteException } from '../../application/exceptions/fileWrite.exception';
+import { FileDeleteException } from '../../application/exceptions/fileDelete.exception';
+import { DirectoryDeleteException } from '../../application/exceptions/directoryDelete.exception';
 
 /**
  * Writes a file at a given path via a promise interface.
@@ -19,7 +22,11 @@ export const createDirectoryIfNotExist = async (
   for (const path of paths) {
     newDirectory = join(newDirectory, path);
     if (!checkIfFileOrDirectoryExists(newDirectory)) {
-      fs.mkdirSync(newDirectory);
+      try {
+        fs.mkdirSync(newDirectory);
+      } catch (error) {
+        console.log(error)
+      }
     }
   }
 };
@@ -36,8 +43,8 @@ export const checkIfFileOrDirectoryExists = (path: string): boolean => {
     return fs.existsSync(path);
   } catch (error) {
     // TODO: log de errores
-    console.error(error);
-    throw error;
+    console.log(error);
+    throw new Error("No existe archivo o directorio");
   }
 };
 
@@ -58,8 +65,8 @@ export const getFile = async (
     return encoding ? readFile(path, encoding) : readFile(path, {});
   } catch (error) {
     // TODO: log de errores
-    console.error(error);
-    throw error;
+    console.log(error);
+    throw new Error("No pudimos leer el archivo");
   }
 };
 
@@ -81,12 +88,12 @@ export const createFile = async (
     if (!checkIfFileOrDirectoryExists(path)) {
       fs.mkdirSync(path);
     }
-  
+
     return await fs.writeFileSync(`${path}/${fileName}`, data, 'utf8');
   } catch (error) {
     // TODO: log de errores
-    console.error(error);
-    throw error;
+    console.log(error);
+    throw new FileWriteException('No pudimos crear el archivo');
   }
 };
 
@@ -102,8 +109,8 @@ export const deleteFile = async (path: string): Promise<void> => {
     return await fs.unlinkSync(path);
   } catch (error) {
     // TODO: log de errores
-    console.error(error);
-    throw error;
+    console.log(error);
+    throw new Error("No pudimos eliminar el archivo");
   }
 };
 
@@ -118,17 +125,22 @@ export const checkIfDirectoryEmpty = async (path: string): Promise<void> => {
   let flag = false;
   const newPath = goUp(path);
   if (newPath.endsWith('public')) flag = true;
-  try {
-    const files = countFiles(newPath);
-    console.log(newPath, files);
-    if (!files && !flag) {
+  const files = countFiles(newPath);
+  console.log(newPath, files);
+  if (!files && !flag) {
+    try {
       await deleteDirectory(newPath);
-      await checkIfDirectoryEmpty(newPath);
+    } catch (error) {
+      // TODO: log de errores
+      console.log(error);
+      throw new FileDeleteException("No podemos eliminar el archivo");
     }
-  } catch (error) {
-    // TODO: log de errores
-    console.error(error);
-    throw error;
+    try {
+      await checkIfDirectoryEmpty(newPath);
+    } catch (error) {
+      throw new DirectoryDeleteException("No podemos eliminar el directorio");
+    }
+    
   }
 };
 
