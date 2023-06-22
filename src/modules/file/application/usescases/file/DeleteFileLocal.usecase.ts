@@ -12,8 +12,7 @@ export default class DeleteFileLocalUseCase {
   public async handler(fileId: string) {
     const files = await this._getFileData.handler(fileId)
     for (const file of files) {
-      const directory = join(process.cwd(), './public', file.filePath)
-      const fullPath = join(directory, file.fileName)
+      const fullPath = join(process.cwd(), 'public', file.filePath, file.fileName)
       deleteFile(fullPath)
       checkIfDirectoryEmpty(fullPath)
     }

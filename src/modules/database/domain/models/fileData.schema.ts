@@ -15,6 +15,8 @@ export class FileDataModel {
     fileSize: number;
     @Prop()
     moduleUuId: string;
+    @Prop()
+    mimeType: string;
     @Prop({ type: String, enum: FileSystem })
     fileSystem: FileSystem;
 }

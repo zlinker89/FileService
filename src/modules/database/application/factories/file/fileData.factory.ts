@@ -11,6 +11,7 @@ export class FileDataFactory {
         fileDataCommand.filesize,
         fileDataCommand.moduleUuId,
         fileDataCommand.fileSystem,
+        fileDataCommand.mimeType,
     );
   }
 }

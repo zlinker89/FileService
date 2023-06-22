@@ -9,6 +9,7 @@ export class ProductMapper {
         fileDataModel.fileSize,
         fileDataModel.moduleUuId,
         fileDataModel.fileSystem,
+        fileDataModel.mimeType,
       );
   
       return fileData;

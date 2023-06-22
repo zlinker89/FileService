@@ -51,6 +51,10 @@ export class FileDataController {
     try {
       const files = await this._getFileData.handler(fileId);
       const file = createReadStream(join(process.cwd(), 'public', files[0].filePath, files[0].fileName));
+      res.set({
+        'Content-Type': files[0].mimeType,
+        'Content-Disposition': `attachment; filename="${files[0].fileName}"`,
+      });
       file.pipe(res);
     } catch (error) {
       throw new FileNotFoundException("El archivo no fue encontrado", 404)

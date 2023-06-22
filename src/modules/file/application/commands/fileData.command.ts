@@ -15,6 +15,9 @@ export class FileDataCommand {
     @ApiProperty({ required: false })
     @IsString()
     public moduleUuId: string
+    @ApiProperty({ required: false })
+    @IsString()
+    public mimeType: string
     @ApiProperty({ enum: FileSystem, required: true })
     public fileSystem: FileSystem
     @ApiProperty({ type: 'string', format: 'binary', required: true })
