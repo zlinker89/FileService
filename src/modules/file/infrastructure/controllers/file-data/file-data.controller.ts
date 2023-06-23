@@ -90,7 +90,7 @@ export class FileDataController {
         status: files.length > 0
       }
     } catch (error) {
-      this.logger.error("El archivo no fue encontrado", error, HttpStatus.NOT_FOUND, FileDataController.name, 'FileService')
+      this.logger.error("El archivo no fue encontrado", error, FileDataController.name)
       throw new FileNotFoundException("El archivo no fue encontrado", 404)
     }
   }
@@ -113,7 +113,7 @@ export class FileDataController {
     try {
       await this._fileStorage.handler(fileUpload, fileDataCommand);
     } catch (error) {
-      // TODO: crear exception CreateFileException
+      this.logger.error("El archivo no pudo ser creado", error, FileDataController.name)
     }
     const fileCreateModel = await this._createFileData.handler(fileDataCommand, fileUpload);
     return {
@@ -144,6 +144,7 @@ export class FileDataController {
         status: fileDeleteModel.deleted,
       };
     } catch (error) {
+      this.logger.error("El archivo no se puedo eliminar", error, FileDataController.name)
       throw new FileNotFoundException("El archivo no fue encontrado", 404)
     }
   }

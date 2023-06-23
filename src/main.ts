@@ -5,10 +5,9 @@ import { CustomLoggerService } from './common/services/customLogger.service';
 import { LoggingInterceptor } from './common/interceptors/loggin.interceptor';
 
 async function bootstrap() {
-  const app = await NestFactory.create(AppModule, {
-    logger: new CustomLoggerService()
-  });
+  const app = await NestFactory.create(AppModule);
   app.enableCors();
+  app.useLogger(await app.resolve(CustomLoggerService));
   const config = new DocumentBuilder()
     .setTitle('EXPERTOSIP FILESERVICE API')
     .setDescription('Una api para administar sistemas de archivos')

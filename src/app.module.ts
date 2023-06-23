@@ -9,6 +9,8 @@ import { MongooseModule } from '@nestjs/mongoose';
 import { ConfigModule } from '@nestjs/config';
 import { APP_INTERCEPTOR } from '@nestjs/core';
 import { LoggingInterceptor } from './common/interceptors/loggin.interceptor';
+import { ClientsModule, Transport } from '@nestjs/microservices';
+import { CustomLoggerService } from './common/services/customLogger.service';
 
 @Module({
   imports: [
@@ -19,9 +21,23 @@ import { LoggingInterceptor } from './common/interceptors/loggin.interceptor';
       rootPath: join(__dirname, '..', 'public'),
     }),
     MongooseModule.forRoot(process.env.URL_DB),
+    ClientsModule.register([
+      {
+        name: 'LOG_SERVICE',
+        transport: Transport.RMQ,
+        options: {
+          urls: ['amqp://franklin:Expertosip%402023.@localhost/'],
+          queue: 'log',
+          queueOptions: {
+            durable: true,
+          },
+        },
+      },
+    ]),
   ],
   controllers: [AppController],
   providers: [AppService,
+    CustomLoggerService,
     {
       provide: APP_INTERCEPTOR,
       useClass: LoggingInterceptor,

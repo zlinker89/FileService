@@ -22,11 +22,7 @@ export const createDirectoryIfNotExist = async (
   for (const path of paths) {
     newDirectory = join(newDirectory, path);
     if (!checkIfFileOrDirectoryExists(newDirectory)) {
-      try {
-        fs.mkdirSync(newDirectory);
-      } catch (error) {
-        console.log(error)
-      }
+      fs.mkdirSync(newDirectory);
     }
   }
 };
@@ -42,9 +38,8 @@ export const checkIfFileOrDirectoryExists = (path: string): boolean => {
   try {
     return fs.existsSync(path);
   } catch (error) {
-    // TODO: log de errores
-    console.log(error);
-    throw new Error("No existe archivo o directorio");
+    console.error(error);
+    throw new Error('No existe archivo o directorio');
   }
 };
 
@@ -64,9 +59,8 @@ export const getFile = async (
   try {
     return encoding ? readFile(path, encoding) : readFile(path, {});
   } catch (error) {
-    // TODO: log de errores
-    console.log(error);
-    throw new Error("No pudimos leer el archivo");
+    console.error(error);
+    throw new Error('No pudimos leer el archivo');
   }
 };
 
@@ -84,17 +78,11 @@ export const createFile = async (
   fileName: string,
   data: Buffer,
 ): Promise<void> => {
-  try {
-    if (!checkIfFileOrDirectoryExists(path)) {
-      fs.mkdirSync(path);
-    }
-
-    return await fs.writeFileSync(`${path}/${fileName}`, data, 'utf8');
-  } catch (error) {
-    // TODO: log de errores
-    console.log(error);
-    throw new FileWriteException('No pudimos crear el archivo');
+  if (!checkIfFileOrDirectoryExists(path)) {
+    fs.mkdirSync(path);
   }
+
+  return await fs.writeFileSync(`${path}/${fileName}`, data, 'utf8');
 };
 
 /**
@@ -105,13 +93,7 @@ export const createFile = async (
  * @returns {Promise<void>}
  */
 export const deleteFile = async (path: string): Promise<void> => {
-  try {
-    return await fs.unlinkSync(path);
-  } catch (error) {
-    // TODO: log de errores
-    console.log(error);
-    throw new Error("No pudimos eliminar el archivo");
-  }
+  return await fs.unlinkSync(path);
 };
 
 /**
@@ -128,19 +110,8 @@ export const checkIfDirectoryEmpty = async (path: string): Promise<void> => {
   const files = countFiles(newPath);
   console.log(newPath, files);
   if (!files && !flag) {
-    try {
-      await deleteDirectory(newPath);
-    } catch (error) {
-      // TODO: log de errores
-      console.log(error);
-      throw new FileDeleteException("No podemos eliminar el archivo");
-    }
-    try {
-      await checkIfDirectoryEmpty(newPath);
-    } catch (error) {
-      throw new DirectoryDeleteException("No podemos eliminar el directorio");
-    }
-    
+    await deleteDirectory(newPath);
+    await checkIfDirectoryEmpty(newPath);
   }
 };
 
