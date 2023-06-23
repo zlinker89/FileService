@@ -3,6 +3,8 @@ import {
   Controller,
   Delete,
   Get,
+  HttpStatus,
+  Logger,
   Param,
   Post,
   Res,
@@ -30,6 +32,7 @@ import { customAuthHeader } from '../../headers/custom.header';
 @Controller('file-data')
 @ApiTags('FSExpert')
 export class FileDataController {
+  private readonly logger = new Logger(FileDataController.name);
   constructor(
     private _fileStorage: FileStorageUseCase,
     private _createFileData: CreateFileDataUseCase,
@@ -60,7 +63,8 @@ export class FileDataController {
       });
       file.pipe(res);
     } catch (error) {
-      throw new FileNotFoundException("El archivo no fue encontrado", 404)
+      this.logger.error("El archivo no fue encontrado", error, HttpStatus.NOT_FOUND, FileDataController.name, 'FileService')
+      throw new FileNotFoundException("El archivo no fue encontrado", HttpStatus.NOT_FOUND)
     }
   }
   @UseGuards(AuthGuard)
@@ -86,6 +90,7 @@ export class FileDataController {
         status: files.length > 0
       }
     } catch (error) {
+      this.logger.error("El archivo no fue encontrado", error, HttpStatus.NOT_FOUND, FileDataController.name, 'FileService')
       throw new FileNotFoundException("El archivo no fue encontrado", 404)
     }
   }

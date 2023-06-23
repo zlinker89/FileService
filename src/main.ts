@@ -1,9 +1,13 @@
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
+import { CustomLoggerService } from './common/services/customLogger.service';
+import { LoggingInterceptor } from './common/interceptors/loggin.interceptor';
 
 async function bootstrap() {
-  const app = await NestFactory.create(AppModule);
+  const app = await NestFactory.create(AppModule, {
+    logger: new CustomLoggerService()
+  });
   app.enableCors();
   const config = new DocumentBuilder()
     .setTitle('EXPERTOSIP FILESERVICE API')
