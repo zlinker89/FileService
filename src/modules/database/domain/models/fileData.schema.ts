@@ -8,6 +8,8 @@ export class FileDataModel {
     @Prop()
     fileDataModelId: string;
     @Prop()
+    uuidName: string;
+    @Prop()
     fileName: string;
     @Prop()
     filePath: string;

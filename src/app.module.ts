@@ -11,6 +11,7 @@ import { APP_INTERCEPTOR } from '@nestjs/core';
 import { LoggingInterceptor } from './common/interceptors/loggin.interceptor';
 import { ClientsModule, Transport } from '@nestjs/microservices';
 import { CustomLoggerService } from './common/services/customLogger.service';
+import { SharedModule } from './modules/shared/shared.module';
 
 @Module({
   imports: [
@@ -34,6 +35,7 @@ import { CustomLoggerService } from './common/services/customLogger.service';
         },
       },
     ]),
+    SharedModule,
   ],
   controllers: [AppController],
   providers: [AppService,

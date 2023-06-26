@@ -15,6 +15,7 @@ export class FileDataFactory {
         fileDataCommand.isTemporal,
         fileDataCommand.createdAt,
         fileDataCommand.expiredAt,
+        fileDataCommand.uuidName,
     );
   }
 }

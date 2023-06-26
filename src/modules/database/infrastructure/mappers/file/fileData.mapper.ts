@@ -13,6 +13,7 @@ export class FileDataMapper {
         fileDataModel.isTemporal,
         fileDataModel.createdAt,
         fileDataModel.expiredAt,
+        fileDataModel.uuidName,
         fileDataModel['_id'],
       );
   

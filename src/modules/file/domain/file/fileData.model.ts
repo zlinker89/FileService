@@ -10,6 +10,7 @@ export class FileData {
   isTemporal: boolean;
   createdAt: string;
   expiredAt: string;
+  uuidName: string;
   constructor(
     fileName: string,
     filePath: string,
@@ -20,6 +21,7 @@ export class FileData {
     isTemporal: boolean,
     createdAt: string,
     expiredAt: string,
+    uuidName: string,
     _id: string = null
   ) {
     this.fileName = fileName;
@@ -31,6 +33,9 @@ export class FileData {
     this.isTemporal = isTemporal;
     this.createdAt = createdAt;
     this.expiredAt = expiredAt;
-    this._id = _id
+    this.uuidName = uuidName;
+    if (_id) {
+      this._id = _id
+    }
   }
 }

@@ -17,6 +17,9 @@ export class FileDataToUpdateCommand {
     public moduleUuId: string
     @ApiProperty({ required: false })
     @IsString()
+    public uuidName: string
+    @ApiProperty({ required: false })
+    @IsString()
     public mimeType: string
     @ApiProperty({ enum: FileSystem, required: false })
     public fileSystem: FileSystem

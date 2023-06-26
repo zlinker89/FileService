@@ -3,7 +3,7 @@ import { Cron } from '@nestjs/schedule';
 import DeleteFileDataUseCase from './../../../../database/application/usecases/file/deleteFile.usecase';
 import Get from './../../../../database/application/usecases/file/filterFile.usecase';
 import { DateTime } from 'luxon';
-import DeleteFileLocalUseCase from './../../usescases/file/DeleteFileLocal.usecase';
+import DeleteFileLocalUseCase from '../../../../shared/application/usecases/file/DeleteFileLocal.usecase';
 import FilterFileDataUseCase from './../../../../database/application/usecases/file/filterFile.usecase';
 
 @Injectable()
@@ -33,11 +33,9 @@ export class GarbageService {
     const files = await this._filterFileDataUseCase.handler(predicate)
     try {
       for (const file of files) {
-        console.log(file._id)
-        await this._deleteFileLocalData.handler(file._id);
+        await this._deleteFileLocalData.handler(file.uuidName, file.filePath);
         await this._deleteFileData.handler(file._id);
-        // console.log(file)
-        // this.logger.debug('Called when the current second is 10', file._id);
+        this.logger.debug("El archivo fue eliminado", file.uuidName)
       }
     } catch (error) {
       this.logger.error("El archivo no se puedo eliminar", error, GarbageService.name)

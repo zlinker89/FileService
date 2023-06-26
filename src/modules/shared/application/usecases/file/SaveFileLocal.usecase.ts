@@ -1,9 +1,9 @@
 import { Injectable } from '@nestjs/common';
 import { diskStorage } from 'multer';
 import { join } from 'path';
-import { FileDataCommand } from '../../commands/fileData.command';
-import { createDirectoryIfNotExist, createFile } from '../../../infrastructure/helpers/storage.helper';
-import { FileDataToUpdateCommand } from '../../commands/fileDataToUpdate.command';
+import { FileDataCommand } from '../../../../file/application/commands/fileData.command';
+import { createDirectoryIfNotExist, createFile } from '../../../../file/infrastructure/helpers/storage.helper';
+import { FileDataToUpdateCommand } from '../../../../file/application/commands/fileDataToUpdate.command';
 
 @Injectable()
 export default class SaveFileLocalUseCase {
@@ -14,7 +14,7 @@ export default class SaveFileLocalUseCase {
     const directory = join(process.cwd(), './public')
     const path = join(directory, fileDataCommand.filePath)
     await createDirectoryIfNotExist(fileDataCommand.filePath, directory)
-    await createFile(path, FileMulter.originalname, FileMulter.buffer)
+    await createFile(path, fileDataCommand.uuidName, FileMulter.buffer)
     return path
   }
 }

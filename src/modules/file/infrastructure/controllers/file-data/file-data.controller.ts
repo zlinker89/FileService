@@ -25,7 +25,7 @@ import { FileInterceptor } from '@nestjs/platform-express';
 import { createReadStream } from 'fs';
 import { join } from 'path';
 import { Response } from 'express';
-import { DeleteFileLocalUseCase, FileStorageUseCase } from 'src/modules/file/application/usescases/file';
+import { DeleteFileLocalUseCase, FileStorageUseCase } from 'src/modules/shared/application/usecases/file';
 import { memoryStorage } from 'multer';
 import { FileNotFoundException } from '../../../application/exceptions/fileNotFound.exception';
 import { AuthGuard } from '../../guards/auth/auth.guard';
@@ -60,7 +60,7 @@ export class FileDataController {
   ) {
     try {
       const files = await this._getFileData.handler(fileId);
-      const file = createReadStream(join(process.cwd(), 'public', files[0].filePath, files[0].fileName));
+      const file = createReadStream(join(process.cwd(), 'public', files[0].filePath, files[0].uuidName));
       res.set({
         'Content-Type': files[0].mimeType,
         'Content-Disposition': `attachment; filename="${files[0].fileName}"`,
@@ -104,7 +104,7 @@ export class FileDataController {
   @ApiBearerAuth('access-token')
   @ApiConsumes('multipart/form-data')
   @UseInterceptors(FileInterceptor('file', {
-    storage: memoryStorage()
+    storage: memoryStorage(),
   }))
   @ApiResponse({
     status: 201,
@@ -114,12 +114,8 @@ export class FileDataController {
     @Body() fileDataCommand: FileDataCommand,
     @UploadedFile() fileUpload: Express.Multer.File,
   ) {
-    try {
-      await this._fileStorage.handler(fileUpload, fileDataCommand);
-    } catch (error) {
-      this.logger.error("El archivo no pudo ser creado", error, FileDataController.name)
-    }
     const fileCreateModel = await this._createFileData.handler(fileDataCommand, fileUpload);
+    console.log('create ', fileCreateModel)
     return {
       data: fileCreateModel.id,
       status: fileCreateModel.created,
@@ -143,11 +139,6 @@ export class FileDataController {
     @Body() fileDataCommand: FileDataToUpdateCommand,
     @UploadedFile() fileUpload?: Express.Multer.File,
   ) {
-    try {
-      await this._fileStorage.handler(fileUpload, fileDataCommand, true, fileDataId);
-    } catch (error) {
-      this.logger.error("El archivo no pudo ser creado", error, FileDataController.name)
-    }
     const fileUpdateModel = await this._updateFileData.handler(fileDataId, fileDataCommand, fileUpload);
     return {
       data: fileUpdateModel.modifiedCount,
@@ -171,7 +162,8 @@ export class FileDataController {
     @Param('fileId') fileId: string
   ) {
     try {
-      await this._deleteFileLocalData.handler(fileId);
+      const files = await this._getFileData.handler(fileId);
+      await this._deleteFileLocalData.handler(files[0].filePath, files[0].uuidName);
       const fileDeleteModel = await this._deleteFileData.handler(fileId);
       return {
         count: fileDeleteModel.deletedCount,
