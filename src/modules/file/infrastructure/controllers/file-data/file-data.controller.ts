@@ -30,6 +30,7 @@ import { memoryStorage } from 'multer';
 import { FileNotFoundException } from '../../../application/exceptions/fileNotFound.exception';
 import { AuthGuard } from '../../guards/auth/auth.guard';
 import { customAuthHeader } from '../../headers/custom.header';
+import { FileDataToUpdateCommand } from '../../../application/commands/fileDataToUpdate.command';
 
 @Controller('file-data')
 @ApiTags('FSExpert')
@@ -139,7 +140,7 @@ export class FileDataController {
   })
   async updateFileData(
     @Param('fileId') fileDataId: string,
-    @Body() fileDataCommand: FileDataCommand,
+    @Body() fileDataCommand: FileDataToUpdateCommand,
     @UploadedFile() fileUpload?: Express.Multer.File,
   ) {
     try {
