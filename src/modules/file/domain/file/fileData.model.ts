@@ -1,5 +1,6 @@
 import { FileSystem } from '../../../../common/enums/fileSystem.enum';
 export class FileData {
+  _id?: string;
   fileName: string;
   filePath: string;
   filesize: number;
@@ -19,6 +20,7 @@ export class FileData {
     isTemporal: boolean,
     createdAt: string,
     expiredAt: string,
+    _id: string = null
   ) {
     this.fileName = fileName;
     this.filePath = filePath;
@@ -29,5 +31,6 @@ export class FileData {
     this.isTemporal = isTemporal;
     this.createdAt = createdAt;
     this.expiredAt = expiredAt;
+    this._id = _id
   }
 }

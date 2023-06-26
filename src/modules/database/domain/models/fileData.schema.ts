@@ -6,7 +6,7 @@ export type FileDataModelDocument = FileDataModel & Document;
 @Schema()
 export class FileDataModel {
     @Prop()
-    fileDataId: number;
+    fileDataModelId: string;
     @Prop()
     fileName: string;
     @Prop()

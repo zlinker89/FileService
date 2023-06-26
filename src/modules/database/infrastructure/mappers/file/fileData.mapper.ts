@@ -13,13 +13,14 @@ export class FileDataMapper {
         fileDataModel.isTemporal,
         fileDataModel.createdAt,
         fileDataModel.expiredAt,
+        fileDataModel['_id'],
       );
   
       return fileData;
     }
   
     public static toDomains(fileDataModels: FileDataModel[]): FileData[] {
-      const fileDatas = new Array<FileData>();
+      const fileDatas: FileData[] = [];
       fileDataModels.forEach((fileDataModel) => {
         const fileData = this.toDomain(fileDataModel);
         fileDatas.push(fileData);

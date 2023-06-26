@@ -11,18 +11,21 @@ import {
   ValidateTokenUseCase,
   VerifyTokenJsonWebTokenUseCase,
 } from './application/usescases/api-key';
+import { GarbageService } from './application/services/garbage/garbage.service';
 import UpdateFileLocalUseCase from './application/usescases/file/updateFileLocal.usecase';
+import { ScheduleModule } from '@nestjs/schedule';
 
 @Module({
   controllers: [FileDataController],
-  imports: [DatabaseModule, MulterModule],
-providers: [
+  imports: [ScheduleModule.forRoot(), DatabaseModule, MulterModule],
+  providers: [
     FileStorageUseCase,
     SaveFileLocalUseCase,
     DeleteFileLocalUseCase,
     UpdateFileLocalUseCase,
     ValidateTokenUseCase,
     VerifyTokenJsonWebTokenUseCase,
+    GarbageService,
   ],
 })
 export class FileModule {}
