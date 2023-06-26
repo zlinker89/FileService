@@ -2,19 +2,20 @@ import { Injectable, Inject } from '@nestjs/common';
 import { FileSystem } from 'src/common/enums/fileSystem.enum';
 import SaveFileLocalUseCase from './SaveFileLocal.usecase';
 import { FileDataCommand } from '../../commands/fileData.command';
+import UpdateFileLocalUseCase from './updateFileLocal.usecase';
 
 @Injectable()
 export default class FileStorageUseCase {
   constructor(
-    private _saveFileLocaUseCase: SaveFileLocalUseCase
+    private _saveFileLocaUseCase: SaveFileLocalUseCase,
+    private _updateFileLocalUseCase: UpdateFileLocalUseCase
   ) {}
 
-  public handler(FileMulter: Express.Multer.File, fileDataCommand: FileDataCommand) {
-    let result = null
+  public handler(FileMulter: Express.Multer.File, fileDataCommand: FileDataCommand, isUpdate = false, fileDataId = null) {
     switch (fileDataCommand.fileSystem) {
         case FileSystem.LOCAL:
-            result = this._saveFileLocaUseCase.handler(FileMulter, fileDataCommand)
-            break;
+            if (!isUpdate) return this._saveFileLocaUseCase.handler(FileMulter, fileDataCommand)
+            return this._updateFileLocalUseCase.handler(FileMulter, fileDataCommand, fileDataId)
         case FileSystem.AWS:
             // TODO: pendiente implementar el AWS
         break;
@@ -22,6 +23,5 @@ export default class FileStorageUseCase {
             // TODO: implementar exception wrong file system
             break;
     }
-    return result
   }
 }

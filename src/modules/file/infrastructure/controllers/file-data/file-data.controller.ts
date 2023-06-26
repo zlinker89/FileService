@@ -7,6 +7,7 @@ import {
   Logger,
   Param,
   Post,
+  Put,
   Res,
   UploadedFile,
   UseGuards,
@@ -18,6 +19,7 @@ import {
   CreateFileDataUseCase,
   DeleteFileDataUseCase,
   GetFileDataUseCase,
+  UpdateFileDataUseCase,
 } from 'src/modules/database/application/usecases/file';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { createReadStream } from 'fs';
@@ -36,6 +38,7 @@ export class FileDataController {
   constructor(
     private _fileStorage: FileStorageUseCase,
     private _createFileData: CreateFileDataUseCase,
+    private _updateFileData: UpdateFileDataUseCase,
     private _getFileData: GetFileDataUseCase,
     private _deleteFileData: DeleteFileDataUseCase,
     private _deleteFileLocalData: DeleteFileLocalUseCase,
@@ -121,6 +124,36 @@ export class FileDataController {
       status: fileCreateModel.created,
     };
   }
+
+  @UseGuards(AuthGuard)
+  @Put('/:fileId')
+  @ApiHeaders(customAuthHeader)
+  @ApiBearerAuth('access-token')
+  @ApiConsumes('multipart/form-data')
+  @UseInterceptors(FileInterceptor('file', {
+    storage: memoryStorage()
+  }))
+  @ApiResponse({
+    status: 200,
+    description: 'Update file',
+  })
+  async updateFileData(
+    @Param('fileId') fileDataId: string,
+    @Body() fileDataCommand: FileDataCommand,
+    @UploadedFile() fileUpload?: Express.Multer.File,
+  ) {
+    try {
+      await this._fileStorage.handler(fileUpload, fileDataCommand, true, fileDataId);
+    } catch (error) {
+      this.logger.error("El archivo no pudo ser creado", error, FileDataController.name)
+    }
+    const fileUpdateModel = await this._updateFileData.handler(fileDataId, fileDataCommand, fileUpload);
+    return {
+      data: fileUpdateModel.modifiedCount,
+      status: fileUpdateModel.modifiedCount > 0,
+    };
+  }
+
   @UseGuards(AuthGuard)
   @Delete('/:fileId')
   @ApiHeaders(customAuthHeader)

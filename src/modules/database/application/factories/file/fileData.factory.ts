@@ -12,6 +12,9 @@ export class FileDataFactory {
         fileDataCommand.moduleUuId,
         fileDataCommand.fileSystem,
         fileDataCommand.mimeType,
+        fileDataCommand.isTemporal,
+        fileDataCommand.createdAt,
+        fileDataCommand.expiredAt,
     );
   }
 }

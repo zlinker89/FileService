@@ -19,5 +19,13 @@ export class FileDataModel {
     mimeType: string;
     @Prop({ type: String, enum: FileSystem })
     fileSystem: FileSystem;
+    @Prop({
+        default: false
+    })
+    isTemporal: boolean;
+    @Prop()
+    createdAt: string;
+    @Prop()
+    expiredAt: string;
 }
 export const FileDataSchema = SchemaFactory.createForClass(FileDataModel);

@@ -22,4 +22,10 @@ export class FileDataCommand {
     public fileSystem: FileSystem
     @ApiProperty({ type: 'string', format: 'binary', required: true })
     public file: Express.Multer.File
+    @ApiProperty({ type: 'boolean', required: true })
+    public isTemporal: boolean
+    @ApiProperty({ type: 'string', required: false })
+    public createdAt: string
+    @ApiProperty({ type: 'string', required: false })
+    public expiredAt: string
 }

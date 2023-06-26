@@ -3,6 +3,7 @@ import { CreatedModel } from 'src/modules/file/infrastructure/interfaces/entity.
 import { FileDataCommand } from '../../../../file/application/commands/fileData.command';
 import { FileDataFactory } from '../../factories/file/fileData.factory';
 import { FileDataRepository } from '../../../infrastructure/repositories/fileData.repository';
+import { DateTime } from 'luxon';
 
 @Injectable()
 export default class CreateFileDataUseCase {
@@ -16,6 +17,11 @@ export default class CreateFileDataUseCase {
     fileDataCommand.fileName = fileUpload.originalname
     fileDataCommand.filesize = fileUpload.size
     fileDataCommand.mimeType = fileUpload.mimetype
+    const dateNow = DateTime.local().setZone('America/Bogota')
+    fileDataCommand.createdAt = dateNow.toISO();
+    if (fileDataCommand.isTemporal && !fileDataCommand.expiredAt) {
+      fileDataCommand.expiredAt = dateNow.plus({ days: 1 }).toISO();
+    }
     const fileDataObject =
       this._fileDataFactory.createFileData(fileDataCommand);
     return this._fileDataRepository.create({ ...fileDataObject });

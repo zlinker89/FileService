@@ -1,7 +1,7 @@
 import { FileData } from '../../../../file/domain/file/fileData.model';
 import { FileDataModel } from '../../../domain/models/fileData.schema';
 
-export class ProductMapper {
+export class FileDataMapper {
     public static toDomain(fileDataModel: FileDataModel): FileData {
       const fileData = new FileData(
         fileDataModel.fileName,
@@ -10,6 +10,9 @@ export class ProductMapper {
         fileDataModel.moduleUuId,
         fileDataModel.fileSystem,
         fileDataModel.mimeType,
+        fileDataModel.isTemporal,
+        fileDataModel.createdAt,
+        fileDataModel.expiredAt,
       );
   
       return fileData;

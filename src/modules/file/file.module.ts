@@ -11,14 +11,16 @@ import {
   ValidateTokenUseCase,
   VerifyTokenJsonWebTokenUseCase,
 } from './application/usescases/api-key';
+import UpdateFileLocalUseCase from './application/usescases/file/updateFileLocal.usecase';
 
 @Module({
   controllers: [FileDataController],
   imports: [DatabaseModule, MulterModule],
-  providers: [
+providers: [
     FileStorageUseCase,
     SaveFileLocalUseCase,
     DeleteFileLocalUseCase,
+    UpdateFileLocalUseCase,
     ValidateTokenUseCase,
     VerifyTokenJsonWebTokenUseCase,
   ],
