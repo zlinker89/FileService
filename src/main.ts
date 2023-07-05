@@ -3,6 +3,8 @@ import { AppModule } from './app.module';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import { CustomLoggerService } from './common/services/customLogger.service';
 import { LoggingInterceptor } from './common/interceptors/loggin.interceptor';
+import { Logger } from '@nestjs/common';
+import { bold } from 'chalk';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
@@ -12,7 +14,7 @@ async function bootstrap() {
   const config = new DocumentBuilder()
     .setTitle('EXPERTOSIP FILESERVICE API')
     .setDescription('Una api para administar sistemas de archivos')
-    .setVersion('v1')
+    .setVersion('1.0')
     .addTag('FSExpert')
     .addServer('https://ep1.elpunto.com.co/')
     .addBearerAuth(
@@ -32,5 +34,11 @@ async function bootstrap() {
   const document = SwaggerModule.createDocument(app, config);
   SwaggerModule.setup('puntocadenafileservice/api', app, document);
   await app.listen(process.env.PORT || 3001);
+  Logger.log(
+    bold.blue(process.env.APPLICATION_NAME) +
+    bold.yellow(' Running On Port ') +
+    bold.green(`http://localhost:${process.env.PORT || 3001}`),
+    'Bootstrap',
+  );
 }
 bootstrap();
