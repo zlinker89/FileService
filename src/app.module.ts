@@ -27,7 +27,7 @@ import { SharedModule } from './modules/shared/shared.module';
         name: 'LOG_SERVICE',
         transport: Transport.RMQ,
         options: {
-          urls: ['amqp://franklin:Expertosip%402023.@localhost/'],
+          urls: [process.env.URL_RABBITMQ],
           queue: 'log',
           queueOptions: {
             durable: true,
