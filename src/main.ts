@@ -14,6 +14,7 @@ async function bootstrap() {
     .setDescription('Una api para administar sistemas de archivos')
     .setVersion('v1')
     .addTag('FSExpert')
+    .addServer('https://ep1.elpunto.com.co/')
     .addBearerAuth(
       {
         // I was also testing it without prefix 'Bearer ' before the JWT
@@ -29,7 +30,7 @@ async function bootstrap() {
     .build();
 
   const document = SwaggerModule.createDocument(app, config);
-  SwaggerModule.setup('api', app, document);
+  SwaggerModule.setup('punto-ecommerce/api', app, document);
   await app.listen(process.env.PORT || 3001);
 }
 bootstrap();
