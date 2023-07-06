@@ -32,7 +32,7 @@ async function bootstrap() {
     .build();
 
   const document = SwaggerModule.createDocument(app, config);
-  SwaggerModule.setup('puntocadenafileservice/api', app, document);
+  SwaggerModule.setup('api', app, document);
   await app.listen(process.env.PORT || 3001);
   Logger.log(
     bold.blue(process.env.APPLICATION_NAME) +
