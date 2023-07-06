@@ -10,7 +10,7 @@ async function bootstrap() {
   const app = await NestFactory.create(AppModule);
   app.enableCors();
   app.useLogger(await app.resolve(CustomLoggerService));
-  app.setGlobalPrefix('puntocadenafileservice/');
+  app.setGlobalPrefix('');
   const config = new DocumentBuilder()
     .setTitle('EXPERTOSIP FILESERVICE API')
     .setDescription('Una api para administar sistemas de archivos')
