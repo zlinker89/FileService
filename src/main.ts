@@ -10,7 +10,7 @@ async function bootstrap() {
   const app = await NestFactory.create(AppModule);
   app.enableCors();
   app.useLogger(await app.resolve(CustomLoggerService));
-  app.setGlobalPrefix('');
+  app.setGlobalPrefix('file-service/');
   const config = new DocumentBuilder()
     .setTitle('EXPERTOSIP FILESERVICE API')
     .setDescription('Una api para administar sistemas de archivos')
@@ -32,7 +32,7 @@ async function bootstrap() {
     .build();
 
   const document = SwaggerModule.createDocument(app, config);
-  SwaggerModule.setup('api', app, document);
+  SwaggerModule.setup('file-service/api', app, document);
   await app.listen(process.env.PORT || 3001);
   Logger.log(
     bold.blue(process.env.APPLICATION_NAME) +
