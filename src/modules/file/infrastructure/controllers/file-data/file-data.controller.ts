@@ -45,7 +45,7 @@ export class FileDataController {
     private _deleteFileLocalData: DeleteFileLocalUseCase,
   ) {}
 
-  @Get('/:fileId/preview')
+  @Get('/:fileId/:contentDispose/:fileName')
   @ApiResponse({
     status: 200,
     description: 'Previsualizar el file por ID',
@@ -56,6 +56,8 @@ export class FileDataController {
   })
   async getFileDataToPreview(
     @Param('fileId') fileId: string,
+    @Param('contentDispose') contentDispose: string,
+    @Param('fileName') fileName: string,
     @Res() res: Response,
   ) {
     try {
@@ -63,7 +65,7 @@ export class FileDataController {
       const file = createReadStream(join(process.cwd(), 'public', files[0].filePath, files[0].uuidName));
       res.set({
         'Content-Type': files[0].mimeType,
-        'Content-Disposition': `attachment; filename="${files[0].fileName}"`,
+        'Content-Disposition': `${contentDispose}; filename="${fileName}"`,
       });
       file.pipe(res);
     } catch (error) {

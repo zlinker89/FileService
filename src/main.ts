@@ -17,6 +17,7 @@ async function bootstrap() {
     .setVersion('1.0')
     .addTag('FSExpert')
     .addServer('https://ep1.elpunto.com.co/')
+    .addServer('http://localhost:3001/')
     .addBearerAuth(
       {
         // I was also testing it without prefix 'Bearer ' before the JWT
